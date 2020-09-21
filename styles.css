@@ -60,16 +60,11 @@ div.project#whynotme{
     background-image: url('./images/whynotme-desktop.png');
 }
 
-.scroll-block{
-    height: 300vh;
-}
-
 .text-container{
     background: rgb(0,0,0,0.8);
-    height: 100vh;
     width: 100%;
     text-align: center;
     padding: 5% 20%;
-    top: 0;
     z-index: 2;
+    top: 0;
 }

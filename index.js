@@ -17,7 +17,7 @@ const projects = [
     }
 ]
 
-function sizeBlocks(){
+function setUpBlocks(){
     for (const elem of document.querySelectorAll("[class*=block]")){
         const classList = elem.className.split(' ')
         for (const className of classList){
@@ -27,34 +27,107 @@ function sizeBlocks(){
                     elem.style.height = height + 'vh'
                     elem.style.position = 'relative'
                     elem.style.top = 0
+                    elem.style.zIndex = -1
                 }
             }
         }
     }
 }
+function setUpTargets(){
+    for (const elem of document.querySelectorAll("[class*=target]")){
+        elem.style.height = '100vh'
+        elem.style.position = 'fixed'
+        elem.style.top = 0
+    }
+}
 
 //TODO: consider changing progress to 0 to 1 rather than 0 to 100?? or should it output pixel count if that's what the user specifies??
 //TODO: blockSelector rather than blockId
-function transform(blockId, targetSelector, callback, start=0, end=100, unit='%'){
+function transform(blockSelector, targetSelector, callback, start=0, end=100, unit='%'){
+    console.log(document.querySelectorAll(blockSelector))
+    for (block of document.querySelectorAll(blockSelector)){
+        console.log(block)
 
-    const windowTop = window.pageYOffset
-    const blockTop = document.getElementById(blockId).offsetTop
-    const blockHeight = document.getElementById(blockId).offsetHeight
-
-    let progress
-    if (unit === '%'){
-        absoluteProgress = (windowTop - blockTop)*100 / (blockHeight-window.innerHeight)
-        if (absoluteProgress < start){
-            progress = 0
+        const windowTop = window.pageYOffset
+        const blockTop = block.offsetTop
+        const blockHeight = block.offsetHeight
+    
+        let progress
+        if (unit === '%'){
+            absoluteProgress = (windowTop - blockTop)*100 / (blockHeight-window.innerHeight)
+            if (absoluteProgress < start){
+                progress = 0
+            }
+            else if (absoluteProgress >= start && absoluteProgress <= end){
+                progress = 100 * (absoluteProgress - start) / (end-start)
+            }
+            else{
+                progress = 100
+            }
         }
-        else if (absoluteProgress >= start && absoluteProgress <= end){
-            progress = 100 * (absoluteProgress - start) / (end-start)
+        else if (unit === 'vh'){
+            absoluteProgress = ((windowTop-blockTop)*100 / window.innerHeight)
+    
+            if (absoluteProgress < start){
+                progress = 0
+            }
+            else if (absoluteProgress >= start && absoluteProgress <= end){
+                progress = absoluteProgress - start
+            }
+            else{
+                progress = end - start
+            }
+        
+        }
+        else if (unit === 'px'){
+            //TODO: need to handle start/end
+            absoluteProgress = (windowTop-blockTop)
+            progress = absoluteProgress
         }
         else{
-            progress = 100
+            throw Error(`unit must be '%', 'vh', or 'px'`)
+        }
+    
+        for (target of block.querySelectorAll(targetSelector)){
+            //console.log(target)
+            callback(target, progress, start, end)
         }
     }
-    else if (unit === 'vh'){
+}
+
+//TODO: what if the user wants to specify a pixel start / end?
+function slideInLeft(blockSelector, targetSelector, start=0, end=100){
+    transform(blockSelector, targetSelector, (target, progress, start, end) => {
+        console.log(target)
+        target.style.marginLeft = `${100-progress}vw`
+    },
+        start, end, '%')
+}
+function slideInRight(blockSelector, targetSelector, start=0, end=100){
+    transform(blockSelector, targetSelector, (target, progress, start, end) => {
+        target.style.marginRight = `${100-progress}vw`
+    },
+        start, end, '%')
+}
+function slideOutLeft(blockSelector, targetSelector, start=0, end=100){
+    transform(blockSelector, targetSelector, (target, progress, start, end) => {
+        target.style.marginLeft = `${progress}vw`
+    },
+        start, end, '%')
+}
+
+
+function scrollOut(blockSelector, targetSelector){
+
+    for (block of document.querySelectorAll(blockSelector)){
+        const end = block.offsetHeight*100 / window.innerHeight
+        const start = end - 100
+        console.log('scroll start', start)
+        console.log('scroll end', end)
+
+        const windowTop = window.pageYOffset
+        const blockTop = block.offsetTop
+    
         absoluteProgress = ((windowTop-blockTop)*100 / window.innerHeight)
 
         if (absoluteProgress < start){
@@ -66,58 +139,24 @@ function transform(blockId, targetSelector, callback, start=0, end=100, unit='%'
         else{
             progress = end - start
         }
-    
+            
+        for (target of block.querySelectorAll(targetSelector)){
+            //console.log(target)
+            target.style.position = 'fixed'
+            target.style.marginTop = `-${progress}vh`    
+        }
     }
-    else if (unit === 'px'){
-        //TODO: need to handle start/end
-        absoluteProgress = (windowTop-blockTop)
-        progress = absoluteProgress
-    }
-    else{
-        throw Error(`unit must be '%', 'vh', or 'px'`)
-    }
-
-    for (target of document.getElementById(blockId).querySelectorAll(targetSelector)){
-        //console.log(target)
-        return callback(target, progress, start, end)
-    }
-}
-
-
-//TODO: what if the user wants to specify a pixel start / end?
-function slideInLeft(blockId, targetSelector, start=0, end=100){
-    transform(blockId, targetSelector, (target, progress, start, end) => {
-        target.style.position = 'fixed'
-        target.style.marginLeft = `${100-progress}vw`
-    },
-        start, end, '%')
-}
-function slideInRight(blockId, targetSelector, start=0, end=100){
-    transform(blockId, targetSelector, (target, progress, start, end) => {
-        target.style.position = 'fixed'
-        target.style.marginRight = `${100-progress}vw`
-    },
-        start, end, '%')
-}
-function slideOutLeft(blockId, targetSelector, start=0, end=100){
-    transform(blockId, targetSelector, (target, progress, start, end) => {
-        target.style.position = 'fixed'
-        target.style.marginLeft = `${progress}vw`
-    },
-        start, end, '%')
-
-}
-
-
-function scrollOut(blockId, targetSelector){
+    /*
     const end = document.getElementById(blockId).offsetHeight*100 / window.innerHeight
     const start = end - 100
 
     transform(blockId, targetSelector, (target, progress) => {
+    
         target.style.position = 'fixed'
         target.style.marginTop = `-${progress}vh`
     },
     start, end, 'vh')
+    */
 }
 //function slideOutLeft(block, target, start=0, end=100, unit='%')
 //function slideInRight(block, target, start=0, end=100, unit='%')
@@ -133,11 +172,8 @@ function scrollOut(blockId, targetSelector){
 
 
 function test(){
-    const blockIds = ['lostart', 'terra', 'whynotme']
-    for (blockId of blockIds){
-        slideInLeft(blockId, '.text-container', 0, 50)
-        scrollOut(blockId, '.text-container')
-    }
+    slideInLeft('.project', '.text-container', 0, 50)
+    scrollOut('.project', '.text-container')
 
     //transform('lostart', '.text-container', undefined, undefined, undefined, '%')
     //transform('lostart', '.text-container', undefined, undefined, undefined, 'vh')
@@ -178,7 +214,8 @@ function handleListeners(){
 
 function handlePortfolio(){
     handleListeners()
-    sizeBlocks()
+    setUpBlocks()
+    setUpTargets()
 }
 
 $(handlePortfolio)
