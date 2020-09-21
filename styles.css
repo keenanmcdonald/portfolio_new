@@ -70,8 +70,6 @@ div.project#whynotme{
     width: 100%;
     text-align: center;
     padding: 5% 20%;
-    position: fixed;
     top: 0;
-    margin-left: 100vw;
     z-index: 2;
 }
