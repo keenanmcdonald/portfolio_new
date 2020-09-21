@@ -33,8 +33,8 @@ function sizeBlocks(){
     }
 }
 
-//TODO: start / end on percentage and px needs to function like vh
-//blockSelector rather than blockId
+//TODO: consider changing progress to 0 to 1 rather than 0 to 100?? or should it output pixel count if that's what the user specifies??
+//TODO: blockSelector rather than blockId
 function transform(blockId, targetSelector, callback, start=0, end=100, unit='%'){
 
     const windowTop = window.pageYOffset
@@ -69,7 +69,7 @@ function transform(blockId, targetSelector, callback, start=0, end=100, unit='%'
     
     }
     else if (unit === 'px'){
-        //need to handle start/end
+        //TODO: need to handle start/end
         absoluteProgress = (windowTop-blockTop)
         progress = absoluteProgress
     }
@@ -77,22 +77,37 @@ function transform(blockId, targetSelector, callback, start=0, end=100, unit='%'
         throw Error(`unit must be '%', 'vh', or 'px'`)
     }
 
-
-
     for (target of document.getElementById(blockId).querySelectorAll(targetSelector)){
         //console.log(target)
         return callback(target, progress, start, end)
     }
 }
 
-function slideInLeft(blockId, targetSelector, start=0, end=100, unit='%'){
-    //TODO: progress needs to reflect start / end
+
+//TODO: what if the user wants to specify a pixel start / end?
+function slideInLeft(blockId, targetSelector, start=0, end=100){
     transform(blockId, targetSelector, (target, progress, start, end) => {
         target.style.position = 'fixed'
         target.style.marginLeft = `${100-progress}vw`
     },
-        start, end, unit)
+        start, end, '%')
 }
+function slideInRight(blockId, targetSelector, start=0, end=100){
+    transform(blockId, targetSelector, (target, progress, start, end) => {
+        target.style.position = 'fixed'
+        target.style.marginRight = `${100-progress}vw`
+    },
+        start, end, '%')
+}
+function slideOutLeft(blockId, targetSelector, start=0, end=100){
+    transform(blockId, targetSelector, (target, progress, start, end) => {
+        target.style.position = 'fixed'
+        target.style.marginLeft = `${progress}vw`
+    },
+        start, end, '%')
+
+}
+
 
 function scrollOut(blockId, targetSelector){
     const end = document.getElementById(blockId).offsetHeight*100 / window.innerHeight
