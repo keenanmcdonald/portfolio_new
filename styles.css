@@ -60,6 +60,10 @@ div.project#whynotme{
     background-image: url('./images/whynotme-desktop.png');
 }
 
+div.project#onbelay{
+    background-image: url('./images/onbelay-desktop.png');
+}
+
 .text-container{
     background: rgb(0,0,0,0.8);
     width: 100%;
@@ -67,4 +71,11 @@ div.project#whynotme{
     padding: 5% 20%;
     z-index: 2;
     top: 0;
+}
+
+.down-arrow{
+    width: 60px;
+    position: absolute;
+    margin-left: -30px;
+    bottom: 20px;
 }
