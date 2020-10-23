@@ -1,20 +1,21 @@
+
 *{
     box-sizing: border-box;
-    color: white;
-}
+    color: rgb(245, 242, 234);
+    font-family: 'Commissioner', sans-serif;
+    text-align: left;
 
-/*
-@font-face {
-    font-family: Emberly;
-    src: url('/fonts/Emberly-SemiBold.otf') format("opentype");
 }
-*/
 
 body{
     background-image: url('./images/background.jpg');
     background-attachment: fixed;
     background-size: cover;
     background-position: center top;
+}
+
+p{
+    font-size: 20px;
 }
 
 header{
@@ -25,8 +26,13 @@ section#hero{
     height: 100vh;
 }
 
+p{
+    font-weight: 200;
+    font-size: 16px;
+    letter-spacing: .12em;
+}
+
 h1.name{
-    font-family: 'Playfair Display', serif;
     font-size: 50px;
     color: white;
 }
@@ -37,40 +43,115 @@ h3.section-title{
 
 h4.project-title{
     font-size: 40px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
-div.project{
+div.project .background-image {
     background-color: black;
     background-size: 100%;
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
+    z-index: 0;
 }
 
-div.project#lostart{
+div.project-information{
+    display: flex;
+}
+
+div.project-information>div{
+    width: 50%;
+}
+
+div.button-container{
+    text-align: center;
+}
+
+button{
+    margin: auto;
+    margin-bottom: 10px;
+    width: 50%;
+    display: block;
+    background: transparent;
+    border: 1px solid;
+    padding: 12px;
+    text-align: center;
+    position: relative;
+    z-index: 100;
+    border-radius: 3px;
+    transition: 0.6s;
+    font-size: 16px;
+}
+
+button:hover{
+    cursor: pointer;
+}
+
+
+/*lost art*/
+
+#lostart button{
+    border-color: rgb(247,192,103);
+    color: rgb(247,192,103);
+}
+#lostart button:hover{
+    background: rgb(247,192,103);
+    color: white;
+}
+
+#lostart .diagonal {
+    background: rgb(247,225,126);
+    background: linear-gradient(90deg, rgba(247,225,126,.9) 0%, rgba(247,192,103,.9) 35%, rgba(208,129,0,.9) 100%);
+}
+
+#lostart .background-image{
     background-image: url('./images/lostart-desktop.png');
+    height: 100%;
 }
 
-div.project#terra{
+
+/* terra */
+
+#terra button{
+    border-color: rgb(116,192,67);
+    color: rgb(116,192,67);
+}
+#terra button:hover{
+    background: rgb(116,192,67);
+    color: white;
+}
+#terra .diagonal{
+    background: rgb(91,157,138);
+    background: linear-gradient(90deg, rgba(91,157,138,1) 0%, rgba(116,192,67,1) 43%, rgba(56,130,8,1) 100%);
+}
+#terra .background-image{
     background-image: url('./images/terra-desktop.png');
+    height: 100%;
 }
 
-div.project#whynotme{
+/*why not me*/
+#whynotme .background-image{
     background-image: url('./images/whynotme-desktop.png');
+    height: 100%;
 }
 
-div.project#onbelay{
+/*on belay*/
+#onbelay .background-image{
     background-image: url('./images/onbelay-desktop.png');
+    height: 100%;
+}
+
+.dark-pane{
+    background: rgb(0,0,0,0.85);
+    width: 100%;
+    z-index: 1;
 }
 
 .text-container{
-    background: rgb(0,0,0,0.8);
     width: 100%;
     text-align: center;
-    padding: 5% 20%;
-    z-index: 2;
-    top: 0;
+    padding: 14% 10%;
+    z-index: 3;
 }
 
 .down-arrow{
@@ -78,4 +159,32 @@ div.project#onbelay{
     position: absolute;
     margin-left: -30px;
     bottom: 20px;
+    /*
+    animation: MoveUpDown 2s ease-in infinite;
+    transition-duration: 0.3s;
+    */
 }
+
+@keyframes MoveUpDown{
+    0%, 100%{
+        margin-bottom: 0px;
+    }
+    50%{
+        margin-bottom: 5px;
+    }
+}
+
+
+.diagonal{
+    height: 40vh;
+    transform: skewY(-3deg);
+    width: 160vw;
+    position: relative;
+    top: -34vh;
+}
+
+.diagonal-container{
+    z-index: 2;
+    width: 100vw;
+}
+

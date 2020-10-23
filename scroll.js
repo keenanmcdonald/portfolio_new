@@ -10,7 +10,7 @@ function setUpBlocks(){
                     elem.style.height = height + 'vh'
                     elem.style.position = 'relative'
                     elem.style.top = 0
-                    elem.style.zIndex = -1
+                    //elem.style.zIndex = -1
                 }
             }
         }
@@ -84,7 +84,7 @@ function slideInLeft(blockSelector, targetSelector, start=0, end=100){
 }
 function slideInRight(blockSelector, targetSelector, start=0, end=100){
     transform(blockSelector, targetSelector, start, end, '%', (target, progress) => {
-        target.style.marginRight = `${100-progress}vw`
+        target.style.marginLeft = `-${100-progress}vw`
     })
 }
 function slideOutLeft(blockSelector, targetSelector, start=0, end=100){
@@ -94,7 +94,7 @@ function slideOutLeft(blockSelector, targetSelector, start=0, end=100){
 }
 function slideOutRight(blockSelector, targetSelector, start=0, end=100){
     transform(blockSelector, targetSelector, start, end, '%', (target, progress) => {
-        target.style.marginLeft = `${progress}vw`
+        target.style.marginLeft = `-${progress}vw`
     })
 }
 function  fadeIn(blockSelector, targetSelector, start=0, end=100){
