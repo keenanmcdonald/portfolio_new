@@ -14,13 +14,59 @@ function test(){
     slideInRight('.project', '.diagonal-container', 0, 50)
     scrollOut('.project', '.diagonal-container')
     fadeIn('.project', '.diagonal-container', 0, 25)
+}
 
+function background(){
+    const hero = document.getElementById('hero')
+    const title = document.getElementById('name')
+    const gradients = [
+        [[247,225,126], [247,192,103], [208,129,0]],
+        [[199,58,37], [162,106,98], [40,32,31]],
+        [[91,157,138], [116,192,67], [56,130,8]], 
+        [[101,235,164], [52,187,116], [15,37,26]],
+    ]
+    let currentGradient = [[...gradients[0][0]], [...gradients[0][1]], [...gradients[0][2]]]
+    let currentTargetIndex = 1
+    console.log('gradients: ', gradients)
+
+    let shiftColor = setInterval(function() {
+        const targetGradient = gradients[currentTargetIndex]
+        let match = true
+
+        for (let i = 0; i < currentGradient.length; i++){
+            let currentColor = currentGradient[i]
+            let targetColor = targetGradient[i]
+
+            for (let j = 0; j < currentColor.length; j++){
+                if (currentColor[j] !== targetColor[j]){
+                    match = false
+                    if (currentColor[j] > targetColor[j]){
+                        currentColor[j] -=  1
+                    }
+                    else{
+                        currentColor[j] += 1
+                    }
+                }
+            }
+        }
+
+        if (match){
+            currentTargetIndex = (currentTargetIndex+1) % gradients.length
+        }
+
+        //title.style.background = `linear-gradient(90deg, rgb(${currentGradient[0][0]},${currentGradient[0][1]},${currentGradient[0][2]}) 0%, rgb(${currentGradient[1][0]},${currentGradient[1][1]},${currentGradient[1][2]}) 50%, rgb(${currentGradient[2][0]},${currentGradient[2][1]},${currentGradient[2][2]}) 100%)`
+        //hero.style.background = `linear-gradient(90deg, rgb(${currentGradient[0][0]},${currentGradient[0][1]},${currentGradient[0][2]}) 0%, rgb(${currentGradient[1][0]},${currentGradient[1][1]},${currentGradient[1][2]}) 50%, rgb(${currentGradient[2][0]},${currentGradient[2][1]},${currentGradient[2][2]}) 100%)`
+        
+    },50)
 }
 
 
 function handlePage(){
     setUp()
     onScroll(test)
+    background()
+    window.scroll(0, 1)
+    window.scroll(0,0)
 }
 
 handlePage()
