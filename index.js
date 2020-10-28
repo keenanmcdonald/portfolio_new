@@ -1,5 +1,9 @@
 
-function test(){
+function handleScroll(){
+    fadeIn('#hero', '.bio-brief', 0, 20)
+    fadeOut('#hero', '.bio-brief', 20, 40)
+    fadeIn('#hero', '.exp', 30, 50)
+
     slideInLeft('.project', '.text-container', 0, 50)
     fadeIn('.project', '.text-container', 0, 50)
     fadeIn('.project', '.dark-pane', 0, 50)
@@ -14,11 +18,16 @@ function test(){
     slideInRight('.project', '.diagonal-container', 0, 50)
     scrollOut('.project', '.diagonal-container')
     fadeIn('.project', '.diagonal-container', 0, 25)
+    
+
+    const scrollPercent = window.pageYOffset/window.innerHeight
+    document.getElementById('scroll-indicator').style.top = `${scrollPercent}%`
+    
 }
 
 function background(){
     const hero = document.getElementById('hero')
-    const title = document.getElementById('name')
+    //const title = document.getElementById('name')
     const gradients = [
         [[247,225,126], [247,192,103], [208,129,0]],
         [[199,58,37], [162,106,98], [40,32,31]],
@@ -27,7 +36,7 @@ function background(){
     ]
     let currentGradient = [[...gradients[0][0]], [...gradients[0][1]], [...gradients[0][2]]]
     let currentTargetIndex = 1
-    console.log('gradients: ', gradients)
+    let middleColorLoc = 50
 
     let shiftColor = setInterval(function() {
         const targetGradient = gradients[currentTargetIndex]
@@ -54,16 +63,24 @@ function background(){
             currentTargetIndex = (currentTargetIndex+1) % gradients.length
         }
 
+        middleColorLoc = middleColorLoc + (Math.random() - 0.5)
+        if (middleColorLoc > 70){
+            middleColorLoc = 70
+        }
+        else if (middleColorLoc < 30){
+            middleColorLoc = 30
+        }
+
         //title.style.background = `linear-gradient(90deg, rgb(${currentGradient[0][0]},${currentGradient[0][1]},${currentGradient[0][2]}) 0%, rgb(${currentGradient[1][0]},${currentGradient[1][1]},${currentGradient[1][2]}) 50%, rgb(${currentGradient[2][0]},${currentGradient[2][1]},${currentGradient[2][2]}) 100%)`
-        //hero.style.background = `linear-gradient(90deg, rgb(${currentGradient[0][0]},${currentGradient[0][1]},${currentGradient[0][2]}) 0%, rgb(${currentGradient[1][0]},${currentGradient[1][1]},${currentGradient[1][2]}) 50%, rgb(${currentGradient[2][0]},${currentGradient[2][1]},${currentGradient[2][2]}) 100%)`
+        hero.style.background = `linear-gradient(90deg, rgba(${currentGradient[0][0]},${currentGradient[0][1]},${currentGradient[0][2]}, 0.5) 0%, rgba(${currentGradient[1][0]},${currentGradient[1][1]},${currentGradient[1][2]}, 0.5) ${middleColorLoc}%, rgba(${currentGradient[2][0]},${currentGradient[2][1]},${currentGradient[2][2]}, 0.5) 100%)`
         
-    },50)
+    },800)
 }
 
 
 function handlePage(){
     setUp()
-    onScroll(test)
+    handleScroll()
     background()
     window.scroll(0, 1)
     window.scroll(0,0)

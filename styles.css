@@ -6,21 +6,59 @@ Why not me: [199,58,37], [162,106,98], [40,32,31],
 OnBelay: [101,235,164], [52,187,116], [15,37,26]
 */
 
+#scroll-map{
+    width: 4px;
+    height: 50vh;
+    margin-top: 25vh;
+    background-color: black;
+    position: fixed;
+    left: 20px;
+}
+
+#scroll-indicator{
+    height: 10px;
+    width: 4px;
+    background-color: white;
+    position: relative;
+}
+
+#hero *{
+    color: black;
+}
+
+#hero .bio-brief{
+    margin-top: 20vh;
+    margin-left: auto;
+    opacity: 0;
+    padding-left: 50%;
+}
+
+#hero .exp{
+    margin-top: 26vh;
+    margin-left: auto;
+    opacity: 0;
+    padding-left: 50%;
+}
+
+#hero p{
+    font-size: 20px;
+}
+
+
+#hero .exp{
+    opacity: 0;
+}
+
 *{
     box-sizing: border-box;
     color: rgb(245, 242, 234);
     font-family: 'Commissioner', sans-serif;
     text-align: left;
+}
 
-}
-/*
 body{
-    background-image: url('./images/background.jpg');
-    background-attachment: fixed;
-    background-size: cover;
-    background-position: center top;
+    background: white;
 }
-*/
 
 p{
     font-size: 20px;
@@ -28,7 +66,7 @@ p{
 
 section#hero{
     height: 100vh;
-    background: black;
+    background: linear-gradient(90deg, rgba(247,225,126, 0.5) 0%, rgba(247,192,103, 0.5) 50%, rgba(208,129,0, 0.5) 100%)
 }
 
 p{
@@ -38,14 +76,14 @@ p{
 }
 
 div.name-container{
-    padding-top: 40vh;
+    padding-top: 2px;
 }
 
 h1.name{
-    font-size: 60px;
+    font-size: 50px;
     font-weight: 700;
-    margin-left: 2%;
-    color: white;
+    margin-left: 4px;
+    color: black;
 }
 
 h3.section-title{

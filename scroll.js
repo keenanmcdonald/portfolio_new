@@ -28,52 +28,66 @@ function setUpTargets(){
 //TODO: consider changing progress to 0 to 1 rather than 0 to 100?? or should it output pixel count if that's what the user specifies??
 //TODO: blockSelector rather than blockId
 function transform(blockSelector, targetSelector, start=0, end=100, unit='%', callback){
-    for (block of document.querySelectorAll(blockSelector)){
+    let inRange = true
+    window.addEventListener('scroll', function(){
+        for (block of document.querySelectorAll(blockSelector)){
 
-        const windowTop = window.pageYOffset
-        const blockTop = block.offsetTop
-        const blockHeight = block.offsetHeight
-    
-        let progress
-        if (unit === '%'){
-            absoluteProgress = (windowTop - blockTop)*100 / (blockHeight-window.innerHeight)
-            if (absoluteProgress < start){
-                progress = 0
-            }
-            else if (absoluteProgress >= start && absoluteProgress <= end){
-                progress = 100 * (absoluteProgress - start) / (end-start)
-            }
-            else{
-                progress = 100
-            }
-        }
-        else if (unit === 'vh'){
-            absoluteProgress = ((windowTop-blockTop)*100 / window.innerHeight)
-    
-            if (absoluteProgress < start){
-                progress = 0
-            }
-            else if (absoluteProgress >= start && absoluteProgress <= end){
-                progress = absoluteProgress - start
-            }
-            else{
-                progress = end - start
-            }
+            const windowTop = window.pageYOffset
+            const blockTop = block.offsetTop
+            const blockHeight = block.offsetHeight
         
-        }
-        else if (unit === 'px'){
-            //TODO: need to handle start/end
-            absoluteProgress = (windowTop-blockTop)
-            progress = absoluteProgress
-        }
-        else{
-            throw Error(`unit must be '%', 'vh', or 'px'`)
-        }
-    
-        for (target of block.querySelectorAll(targetSelector)){
-            callback(target, progress, start, end)
-        }
-    }
+            let progress
+            if (unit === '%'){
+                absoluteProgress = (windowTop - blockTop)*100 / (blockHeight-window.innerHeight)
+                if (absoluteProgress < start && inRange){
+                    inRange = false
+                    progress = 0
+                }
+                else if (absoluteProgress >= start && absoluteProgress <= end){
+                    inRange = true
+                    progress = 100 * (absoluteProgress - start) / (end-start)
+                }
+                else if (absoluteProgress > end && inRange){
+                    inRange = false
+                    progress = 100
+                }
+                else{
+                    return
+                }
+            }
+            else if (unit === 'vh'){
+                absoluteProgress = ((windowTop-blockTop)*100 / window.innerHeight)
+        
+                if (absoluteProgress < start){
+                    inRange = false
+                    progress = 0
+                }
+                else if (absoluteProgress >= start && absoluteProgress <= end){
+                    inRange = true
+                    progress = absoluteProgress - start
+                }
+                else if (absoluteProgress > end && inRange){
+                    inRange = false
+                    progress = end - start
+                }
+                else{
+                    return
+                }
+            }
+            else if (unit === 'px'){
+                //TODO: need to handle start/end
+                absoluteProgress = (windowTop-blockTop)
+                progress = absoluteProgress
+            }
+            else{
+                throw Error(`unit must be '%', 'vh', or 'px'`)
+            }
+                
+            for (target of block.querySelectorAll(targetSelector)){
+                callback(target, progress, start, end)
+            }
+        }    
+    })
 }
 
 //TODO: what if the user wants to specify a pixel start / end?
@@ -103,7 +117,9 @@ function  fadeIn(blockSelector, targetSelector, start=0, end=100){
     })
 }
 function  fadeOut(blockSelector, targetSelector, start=0, end=100){
+    console.log('fadeOut called')
     transform(blockSelector, targetSelector, start, end, '%', (target, progress) => {
+        console.log(progress)
         target.style.opacity = `${1-progress/100}`
     })
 }
@@ -146,12 +162,6 @@ function scrollOut(blockSelector, targetSelector){
             target.style.marginTop = `-${progress}vh`    
         }
     }
-}
-
-
-
-function onScroll(callback){
-    window.addEventListener('scroll', callback)
 }
 
 function setUp(){
