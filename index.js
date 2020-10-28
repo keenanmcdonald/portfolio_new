@@ -18,7 +18,6 @@ function handleScroll(){
     slideInRight('.project', '.diagonal-container', 0, 50)
     scrollOut('.project', '.diagonal-container')
     fadeIn('.project', '.diagonal-container', 0, 25)
-    
 
     const scrollPercent = window.pageYOffset/window.innerHeight
     document.getElementById('scroll-indicator').style.top = `${scrollPercent}%`
