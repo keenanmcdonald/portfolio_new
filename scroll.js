@@ -35,6 +35,7 @@ function transform(blockSelector, targetSelector, start=0, end=100, unit='%', ca
             const windowTop = window.pageYOffset
             const blockTop = block.offsetTop
             const blockHeight = block.offsetHeight
+            let callFunction = true
         
             let progress
             if (unit === '%'){
@@ -52,7 +53,7 @@ function transform(blockSelector, targetSelector, start=0, end=100, unit='%', ca
                     progress = 100
                 }
                 else{
-                    return
+                    callFunction = false
                 }
             }
             else if (unit === 'vh'){
@@ -71,7 +72,7 @@ function transform(blockSelector, targetSelector, start=0, end=100, unit='%', ca
                     progress = end - start
                 }
                 else{
-                    return
+                    callFunction = false
                 }
             }
             else if (unit === 'px'){
@@ -82,9 +83,11 @@ function transform(blockSelector, targetSelector, start=0, end=100, unit='%', ca
             else{
                 throw Error(`unit must be '%', 'vh', or 'px'`)
             }
-                
-            for (target of block.querySelectorAll(targetSelector)){
-                callback(target, progress, start, end)
+
+            if (callFunction){
+                for (target of block.querySelectorAll(targetSelector)){
+                    callback(target, progress, start, end)
+                }
             }
         }    
     })
@@ -111,12 +114,12 @@ function slideOutRight(blockSelector, targetSelector, start=0, end=100){
         target.style.marginLeft = `-${progress}vw`
     })
 }
-function  fadeIn(blockSelector, targetSelector, start=0, end=100){
+function fadeIn(blockSelector, targetSelector, start=0, end=100){
     transform(blockSelector, targetSelector, start, end, '%', (target, progress) => {
         target.style.opacity = `${progress/100}`
     })
 }
-function  fadeOut(blockSelector, targetSelector, start=0, end=100){
+function fadeOut(blockSelector, targetSelector, start=0, end=100){
     console.log('fadeOut called')
     transform(blockSelector, targetSelector, start, end, '%', (target, progress) => {
         console.log(progress)
@@ -137,31 +140,32 @@ function  fadeOut(blockSelector, targetSelector, start=0, end=100){
 
 
 function scrollOut(blockSelector, targetSelector){
+    window.addEventListener('scroll', function(){
+        for (block of document.querySelectorAll(blockSelector)){
+            const end = block.offsetHeight*100 / window.innerHeight
+            const start = end - 100
 
-    for (block of document.querySelectorAll(blockSelector)){
-        const end = block.offsetHeight*100 / window.innerHeight
-        const start = end - 100
+            const windowTop = window.pageYOffset
+            const blockTop = block.offsetTop
+        
+            absoluteProgress = ((windowTop-blockTop)*100 / window.innerHeight)
 
-        const windowTop = window.pageYOffset
-        const blockTop = block.offsetTop
-    
-        absoluteProgress = ((windowTop-blockTop)*100 / window.innerHeight)
-
-        if (absoluteProgress < start){
-            progress = 0
+            if (absoluteProgress < start){
+                progress = 0
+            }
+            else if (absoluteProgress >= start && absoluteProgress <= end){
+                progress = absoluteProgress - start
+            }
+            else{
+                progress = end - start
+            }
+                
+            for (target of block.querySelectorAll(targetSelector)){
+                target.style.position = 'fixed'
+                target.style.marginTop = `-${progress}vh`    
+            }
         }
-        else if (absoluteProgress >= start && absoluteProgress <= end){
-            progress = absoluteProgress - start
-        }
-        else{
-            progress = end - start
-        }
-            
-        for (target of block.querySelectorAll(targetSelector)){
-            target.style.position = 'fixed'
-            target.style.marginTop = `-${progress}vh`    
-        }
-    }
+    })
 }
 
 function setUp(){

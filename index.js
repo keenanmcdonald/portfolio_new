@@ -21,7 +21,6 @@ function handleScroll(){
 
     const scrollPercent = window.pageYOffset/window.innerHeight
     document.getElementById('scroll-indicator').style.top = `${scrollPercent}%`
-    
 }
 
 function background(){
@@ -81,6 +80,7 @@ function handlePage(){
     setUp()
     handleScroll()
     background()
+    
     window.scroll(0, 1)
     window.scroll(0,0)
 }
